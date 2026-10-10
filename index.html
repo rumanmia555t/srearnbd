@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="theme-color" content="#080d19">
+<title>SR Earn BD</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+:root{--bg:#080d19;--card:#111b2e;--line:#263750;--blue:#1688ff;--cyan:#40c4ff;--green:#28dba0;--white:#f4f7ff;--muted:#91a0b8}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--white);font-family:Arial,sans-serif;padding-bottom:85px}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.topbar{height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:#0b1220;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.brand{font-size:20px;font-weight:900}.brand span{color:var(--blue)}
+.btn-icon{width:40px;height:40px;border-radius:12px;background:#15233a;color:white;border:1px solid var(--line)}
+.container{max-width:600px;margin:auto;padding:14px}
+.userbar{display:flex;align-items:center;gap:11px;padding:12px;background:var(--card);border:1px solid var(--line);border-radius:22px;margin-bottom:15px}
+.avatar{width:49px;height:49px;border-radius:50%;object-fit:cover;background:#17243a;border:2px solid var(--blue)}
+.userinfo{flex:1;min-width:0}.username{font-size:15px;font-weight:bold;overflow-wrap:anywhere}
+.uid{font-size:12px;color:var(--cyan);margin-top:5px}
+.badge{font-size:10px;padding:8px;border-radius:20px;background:#10342f;color:var(--green)}
+.page{display:none}.page.active{display:block}
+.balance-card,.banner{background:linear-gradient(130deg,#101a2c,#064c98,#087de4);border:1px solid #2369ac;border-radius:25px;padding:23px 18px;margin-bottom:15px}
+.eyebrow{font-size:12px;letter-spacing:1.5px;color:#d0e5ff;font-weight:bold}
+.balance{font-size:38px;font-weight:900;margin:18px 0 23px;overflow-wrap:anywhere}
+.stats,.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat,.info{padding:15px 10px;background:#101b2e;border:1px solid var(--line);border-radius:17px;text-align:center}
+.stat span,.info span{display:block;color:var(--muted);font-size:11px;margin-bottom:10px}
+.stat strong,.info strong{font-size:18px}
+.section-title{font-weight:bold;margin:23px 0 12px}
+.menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.menu-card{min-height:112px;background:var(--card);color:white;border:1px solid var(--line);border-radius:19px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px}
+.menu-card i{font-size:24px;color:var(--cyan)}.menu-card b{font-size:11px}
+.banner{text-align:center;padding:25px 15px}.banner i{font-size:35px;color:var(--cyan)}
+.banner h2{font-size:22px;color:var(--green);margin:15px 0 8px}.banner p{font-size:13px;line-height:1.6}
+.panel{background:var(--card);border:1px solid var(--line);padding:18px;border-radius:22px;margin:14px 0}
+.panel h2{font-size:19px;margin-top:0}
+.panel p{color:var(--muted);font-size:13px;line-height:1.6}
+.info{padding:17px 8px}.info i{display:block;color:var(--cyan);font-size:22px;margin-bottom:12px}
+.progress-wrap{background:#0b1322;border:1px solid var(--line);border-radius:16px;padding:15px;margin:15px 0}
+.progress-head{display:flex;justify-content:space-between;font-size:12px;margin-bottom:12px}
+.progress{height:8px;background:#29374d;border-radius:10px;overflow:hidden}
+.progress div{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--cyan))}
+.primary{width:100%;padding:15px;border:0;border-radius:14px;background:linear-gradient(100deg,#0875ed,#169cff);color:white;font-weight:bold}
+.primary:disabled{opacity:.5}
+.secondary{background:#14253d;color:#8fcaff;border:1px solid #2b4d72;padding:12px;border-radius:12px}
+.field{margin:15px 0}.field label{display:block;color:#b9c8dd;font-size:12px;margin-bottom:8px}
+.field input,.field select{width:100%;padding:14px;background:#0a1322;border:1px solid #2b3d57;border-radius:12px;color:white;outline:none}
+.field select option{background:#111b2e}
+.rowlink{display:flex;gap:7px}.rowlink input{min-width:0;flex:1;font-size:12px}
+.copy{background:var(--blue);border:0;color:white;border-radius:10px;padding:0 12px}
+.detail{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--line);font-size:13px}
+.detail span{color:var(--muted)}.detail strong{text-align:right;overflow-wrap:anywhere}
+.notice{background:#302817;border:1px solid #5b4927;color:#ffdc8b;padding:12px;border-radius:12px;font-size:12px;line-height:1.6;margin:13px 0}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;background:#0c1423;border-top:1px solid var(--line);padding:9px 2px calc(9px + env(safe-area-inset-bottom));z-index:8}
+.nav-btn{flex:1;min-width:0;border:0;background:none;color:#8494ad;font-size:9px;font-weight:bold;display:flex;align-items:center;flex-direction:column;gap:7px;padding:5px 0}
+.nav-btn i{font-size:20px}.nav-btn.active{color:#42aaff}
+.hidden{display:none!important}
+.profile-head{text-align:center;padding:12px}
+.profile-avatar{width:85px;height:85px;border-radius:50%;object-fit:cover;border:3px solid var(--blue)}
+#adminPage .field label{font-size:13px}
+.setting-title{color:var(--cyan);font-size:14px;margin-top:23px}
+.status{font-size:12px;line-height:1.6;overflow-wrap:anywhere}
+.checkrow{display:flex;align-items:center;gap:10px;padding:10px 0;font-size:13px}
+.checkrow input{width:18px;height:18px;accent-color:var(--blue)}
+@media(max-width:360px){.container{padding:10px}.balance{font-size:32px}.menu-grid{gap:6px}.menu-card{min-height:100px}.menu-card b{font-size:10px}.badge{font-size:9px;padding:6px}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+ <button class="btn-icon" onclick="showPage('home')" aria-label="Home"><i class="fa-solid fa-house"></i></button>
+ <div class="brand">SR <span>EARN BD</span></div>
+ <button class="btn-icon" onclick="openAdmin()" aria-label="Admin Login"><i class="fa-solid fa-user-shield"></i></button>
+</header>
+
+<div class="container">
+<div class="userbar">
+ <img id="avatar" class="avatar" src="https://placehold.co/100x100/15233a/40c4ff?text=SR" alt="Telegram profile">
+ <div class="userinfo">
+  <div class="username" id="topName">Telegram User</div>
+  <div class="uid" id="topUsername">Open inside Telegram</div>
+ </div>
+ <span class="badge">● ACTIVE</span>
+</div>
+
+<!-- HOME -->
+<section id="home" class="page active">
+ <div class="balance-card">
+  <div class="eyebrow">CURRENT PROFIT WALLET</div>
+  <div class="balance">TK <span id="balance">0.00</span></div>
+  <div class="stats">
+   <div class="stat"><span>TOTAL EARNED</span><strong>TK <span id="earned">0.00</span></strong></div>
+   <div class="stat"><span>MY NETWORK</span><strong id="network">0</strong></div>
+  </div>
+ </div>
+ <div class="section-title">Quick Menu</div>
+ <div class="menu-grid">
+  <button class="menu-card" onclick="showPage('earn')"><i class="fa-solid fa-circle-play"></i><b>EARN AD</b></button>
+  <button class="menu-card" onclick="showPage('web')"><i class="fa-solid fa-link"></i><b>WEB TASK</b></button>
+  <button class="menu-card" onclick="showPage('tasks')"><i class="fa-brands fa-telegram"></i><b>TASKS</b></button>
+  <button class="menu-card" onclick="showPage('wallet')"><i class="fa-solid fa-wallet"></i><b>WITHDRAW</b></button>
+  <button class="menu-card" onclick="showPage('refer')"><i class="fa-solid fa-gift"></i><b>REFERRAL</b></button>
+  <button class="menu-card" onclick="showPage('profile')"><i class="fa-solid fa-user"></i><b>PROFILE</b></button>
+ </div>
+ <div class="section-title">Account Overview</div>
+ <div class="grid2">
+  <div class="info"><i class="fa-solid fa-check-double"></i><span>COMPLETED TASKS</span><strong id="homeTasks">0</strong></div>
+  <div class="info"><i class="fa-solid fa-wallet"></i><span>TOTAL WITHDRAWN</span><strong>TK <span id="homeWithdrawn">0.00</span></strong></div>
+ </div>
+</section>
+
+<!-- EARN -->
+<section id="earn" class="page">
+ <div class="banner"><i class="fa-solid fa-circle-play"></i><h2>ADS REWARD CENTER</h2><p>Complete daily missions to earn rewards</p></div>
+ <div class="grid2">
+  <div class="info"><i class="fa-solid fa-stopwatch"></i><span>WAIT TIME</span><strong><span id="waitTime">--</span> Sec</strong></div>
+  <div class="info"><i class="fa-solid fa-bolt"></i><span>DAILY LIMIT</span><strong id="dailyLimit">--</strong></div>
+  <div class="info"><i class="fa-solid fa-bullseye"></i><span>REWARD PER AD</span><strong>TK <span id="reward">--</span></strong></div>
+  <div class="info"><i class="fa-solid fa-circle-check"></i><span>COMPLETED</span><strong id="todayDone">0</strong></div>
+ </div>
+ <div class="progress-wrap"><div class="progress-head"><b>Mission Progress</b><b id="progressText">0 / 0</b></div><div class="progress"><div id="progressBar"></div></div></div>
+ <div class="panel"><h2>Watch Ad & Earn</h2><p id="earnMessage">Task settings will appear after loading.</p><button class="primary" id="startBtn" onclick="startTask()"><i class="fa-solid fa-play"></i> START TASK</button></div>
+</section>
+
+<section id="web" class="page">
+ <div class="banner"><i class="fa-solid fa-link"></i><h2>WEB TASKS</h2><p>Available website tasks</p></div>
+ <div class="panel" id="webTasks"><p>No web tasks configured.</p></div>
+</section>
+
+<section id="tasks" class="page">
+ <div class="banner"><i class="fa-brands fa-telegram"></i><h2>DAILY TASKS</h2><p>Complete available tasks</p></div>
+ <div class="panel" id="taskList"><p>No tasks configured.</p></div>
+</section>
+
+<section id="refer" class="page">
+ <div class="banner"><i class="fa-solid fa-gift"></i><h2>INVITE & EARN</h2><p>Invite friends using your personal link</p></div>
+ <div class="grid2">
+  <div class="info"><i class="fa-solid fa-users"></i><span>TOTAL NETWORK</span><strong id="refCount">0</strong></div>
+  <div class="info"><i class="fa-solid fa-percent"></i><span>BONUS RATE</span><strong id="bonusRate">--</strong></div>
+ </div>
+ <div class="panel"><h2>YOUR NETWORK LINK</h2>
+  <div class="field"><label>Personal referral link</label><div class="rowlink"><input id="refLink" readonly placeholder="Loading referral link"><button class="copy" onclick="copyLink()">COPY</button></div></div>
+  <button class="primary" onclick="shareLink()"><i class="fa-brands fa-telegram"></i> SHARE ON TELEGRAM</button>
+ </div>
+</section>
+
+<section id="wallet" class="page">
+ <div class="banner"><i class="fa-solid fa-wallet"></i><h2>MY WALLET</h2><p>Withdrawal requests</p></div>
+ <div class="panel"><div class="eyebrow">AVAILABLE BALANCE</div><div class="balance" style="font-size:32px">TK <span id="walletBalance">0.00</span></div>
+  <div class="notice" id="withdrawNotice">Withdrawal settings are not configured yet.</div>
+  <form onsubmit="requestWithdrawal(event)">
+   <div class="field"><label>WITHDRAWAL AMOUNT</label><input id="withdrawAmount" type="number" min="1" step="0.01" required placeholder="Enter amount"></div>
+   <div class="field"><label>ACCOUNT / WALLET ADDRESS</label><input id="walletAddress" required placeholder="Enter wallet number"></div>
+   <div id="gatewayWrap" class="field hidden"><label>SELECT PAYMENT GATEWAY</label><select id="gateway" required></select></div>
+   <p id="gatewayMessage" class="status">Payment methods are currently unavailable.</p>
+   <button class="primary" type="submit">SUBMIT WITHDRAWAL</button>
+   <p id="withdrawMessage" class="status"></p>
+  </form>
+ </div>
+ <div class="panel"><h2>Withdrawal History</h2><div id="withdrawHistory"><p>No withdrawal records.</p></div></div>
+</section>
+
+<section id="profile" class="page">
+ <div class="panel">
+  <div class="profile-head"><img id="profileAvatar" class="profile-avatar" src="https://placehold.co/100x100/15233a/40c4ff?text=SR" alt="Profile"><h2 id="profileName">Telegram User</h2><p id="profileUsername">@username</p><p class="uid" id="profileId">Telegram ID: --</p></div>
+  <div class="detail"><span>Total earned</span><strong>TK <span id="profileEarned">0.00</span></strong></div>
+  <div class="detail"><span>Current balance</span><strong>TK <span id="profileBalance">0.00</span></strong></div>
+  <div class="detail"><span>Total withdrawn</span><strong>TK <span id="profileWithdrawn">0.00</span></strong></div>
+  <div class="detail"><span>Tasks completed</span><strong id="profileTasks">0</strong></div>
+  <div class="detail"><span>Total referrals</span><strong id="profileRefs">0</strong></div>
+ </div>
+ <div class="panel"><button class="secondary" onclick="loadAccount()">REFRESH PROFILE</button></div>
+</section>
+
+<!-- ADMIN LOGIN -->
+<section id="adminLogin" class="page">
+ <div class="banner"><i class="fa-solid fa-user-shield"></i><h2>ADMIN LOGIN</h2><p>Administrator access only</p></div>
+ <div class="panel">
+  <form onsubmit="adminLogin(event)">
+   <div class="field"><label>ADMIN EMAIL</label><input id="adminEmail" type="email" autocomplete="username" required placeholder="Admin email"></div>
+   <div class="field"><label>ADMIN PASSWORD</label><input id="adminPassword" type="password" autocomplete="current-password" required placeholder="Admin password"></div>
+   <button class="primary" id="adminLoginBtn" type="submit">SECURE LOGIN</button>
+   <p id="adminLoginMessage" class="status"></p>
+  </form>
+  <button class="secondary" onclick="showPage('home')">BACK TO HOME</button>
+ </div>
+</section>
+
+<!-- ADMIN PANEL -->
+<section id="adminPage" class="page">
+ <div class="banner"><i class="fa-solid fa-sliders"></i><h2>ADMIN CONTROL PANEL</h2><p>Manage rewards and user options</p></div>
+ <div class="panel">
+  <h2>Reward Settings</h2>
+  <div class="field"><label>Reward per completed ad (TK)</label><input id="cfgReward" type="number" min="0" step="0.01"></div>
+  <div class="field"><label>Ad wait time (seconds)</label><input id="cfgWait" type="number" min="1" step="1"></div>
+  <div class="field"><label>Daily ad limit</label><input id="cfgLimit" type="number" min="0" step="1"></div>
+  <div class="field"><label>Referral bonus (%)</label><input id="cfgBonus" type="number" min="0" max="100" step="0.1"></div>
+  <div class="field"><label>Minimum withdrawal (TK)</label><input id="cfgMinimum" type="number" min="0" step="0.01"></div>
+  <div class="field"><label>Required referrals for withdrawal</label><input id="cfgRefs" type="number" min="0" step="1"></div>
+  <div class="field"><label>Telegram bot username (without @)</label><input id="cfgBot" placeholder="YourBotUsername"></div>
+  <div class="setting-title">Payment Gateway Visibility</div>
+  <p>শুধু টিক দেওয়া পেমেন্ট অপশন ইউজারের Wallet-এ দেখানোর জন্য সার্ভারে সংরক্ষণ করুন।</p>
+  <label class="checkrow"><input type="checkbox" id="cfgBkash"> bKash চালু রাখুন</label>
+  <label class="checkrow"><input type="checkbox" id="cfgNagad"> Nagad চালু রাখুন</label>
+  <label class="checkrow"><input type="checkbox" id="cfgRocket"> Rocket চালু রাখুন</label>
+  <div class="setting-title">Feature Visibility</div>
+  <label class="checkrow"><input type="checkbox" id="cfgWeb"> Web Task অপশন দেখান</label>
+  <label class="checkrow"><input type="checkbox" id="cfgTasks"> Telegram Tasks অপশন দেখান</label>
+  <button class="primary" onclick="saveSettings()">SAVE SETTINGS</button>
+  <p id="settingsMessage" class="status"></p>
+ </div>
+ <div class="panel">
+  <h2>Admin Session</h2>
+  <p>অ্যাডমিন কাজ শেষ হলে লগআউট করুন।</p>
+  <button class="secondary" onclick="adminLogout()">ADMIN LOGOUT</button>
+ </div>
+</section>
+</div>
+
+<nav class="bottom-nav" id="bottomNav">
+ <button class="nav-btn active" data-page="home" onclick="showPage('home')"><i class="fa-solid fa-house"></i>HOME</button>
+ <button class="nav-btn" data-page="web" id="navWeb" onclick="showPage('web')"><i class="fa-solid fa-link"></i>WEB</button>
+ <button class="nav-btn" data-page="earn" onclick="showPage('earn')"><i class="fa-solid fa-play"></i>EARN</button>
+ <button class="nav-btn" data-page="tasks" id="navTasks" onclick="showPage('tasks')"><i class="fa-brands fa-telegram"></i>TASKS</button>
+ <button class="nav-btn" data-page="refer" onclick="showPage('refer')"><i class="fa-solid fa-gift"></i>REFER</button>
+ <button class="nav-btn" data-page="wallet" onclick="showPage('wallet')"><i class="fa-solid fa-wallet"></i>WALLET</button>
+ <button class="nav-btn" data-page="profile" onclick="showPage('profile')"><i class="fa-solid fa-user"></i>PROFILE</button>
+</nav>
+
+<script>
+/*
+  SR EARN BD FRONTEND
+  PHP/MySQL backend API প্রয়োজন।
+
+  apiUrl: তোমার সার্ভারের API endpoint বসাও।
+  নিচের API action-গুলো সার্ভারে তৈরি করতে হবে:
+  me, settings, admin_login, admin_settings,
+  admin_save_settings, start_ad, complete_ad, withdraw
+
+  Admin email/password কখনো এই ফাইলে সংরক্ষণ করবে না।
+*/
+const CONFIG = {
+ apiUrl: "", // উদাহরণ: https://yourdomain.com/api.php
+ botUsername: "",
+ reward: 0,
+ waitSeconds: 0,
+ dailyLimit: 0,
+ bonusPercent: 0,
+ minimumWithdraw: 0,
+ requiredReferrals: 0,
+ gateways: [],
+ showWeb: false,
+ showTasks: false
+};
+
+const tg = window.Telegram?.WebApp;
+if(tg){tg.ready();tg.expand();}
+
+const $=id=>document.getElementById(id);
+const money=n=>Number(n||0).toFixed(2);
+let account={id:null,username:"",first_name:"Telegram User",photo_url:"",balance:0,total_earned:0,total_withdrawn:0,tasks_completed:0,referrals:0};
+let todayDone=0,timerBusy=false,timerInterval=null,adminAuthenticated=false;
+
+function showPage(id){
+ if(id==="adminPage"&&!adminAuthenticated){openAdmin();return;}
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+ $(id).classList.add("active");
+ document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
+ $("bottomNav").classList.toggle("hidden",id==="adminLogin"||id==="adminPage");
+ if(tg?.BackButton){if(["home","adminLogin","adminPage"].includes(id))tg.BackButton.hide();else tg.BackButton.show();}
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+if(tg?.BackButton)tg.BackButton.onClick(()=>showPage("home"));
+
+async function api(action,payload){
+ if(!CONFIG.apiUrl)throw Error("API URL সেট করা হয়নি। আগে PHP backend সংযুক্ত করুন।");
+ const headers={"Content-Type":"application/json"};
+ if(tg?.initData)headers["X-Telegram-Init-Data"]=tg.initData;
+ const res=await fetch(CONFIG.apiUrl+"?api="+encodeURIComponent(action),{
+  method:payload?"POST":"GET",headers,
+  credentials:"include",
+  body:payload?JSON.stringify(payload):undefined
+ });
+ const data=await res.json();
+ if(!res.ok||data.error)throw Error(data.error||"Request failed");
+ return data;
+}
+
+function openAdmin(){
+ $("adminEmail").value="";
+ $("adminPassword").value="";
+ $("adminLoginMessage").textContent="";
+ showPage("adminLogin");
+}
+
+async function adminLogin(e){
+ e.preventDefault();
+ const btn=$("adminLoginBtn"),msg=$("adminLoginMessage");
+ btn.disabled=true;msg.textContent="Verifying administrator...";
+ try{
+  // Server verifies the email and password and creates a secure session.
+  const result=await api("admin_login",{
+   email:$("adminEmail").value.trim(),
+   password:$("adminPassword").value
+  });
+  if(!result.success)throw Error(result.message||"Login failed");
+  adminAuthenticated=true;
+  $("adminPassword").value="";
+  await loadAdminSettings();
+  showPage("adminPage");
+ }catch(err){msg.textContent=err.message;}
+ finally{btn.disabled=false;}
+}
+
+async function adminLogout(){
+ try{await api("admin_logout",{});}catch(e){}
+ adminAuthenticated=false;
+ showPage("home");
+}
+
+async function loadAdminSettings(){
+ if(!adminAuthenticated)throw Error("Admin login required");
+ const d=await api("admin_settings");
+ const s=d.settings||d;
+ $("cfgReward").value=s.reward??0;
+ $("cfgWait").value=s.waitSeconds??15;
+ $("cfgLimit").value=s.dailyLimit??0;
+ $("cfgBonus").value=s.bonusPercent??0;
+ $("cfgMinimum").value=s.minimumWithdraw??0;
+ $("cfgRefs").value=s.requiredReferrals??0;
+ $("cfgBot").value=s.botUsername??"";
+ $("cfgBkash").checked=(s.gateways||[]).includes("Bkash");
+ $("cfgNagad").checked=(s.gateways||[]).includes("Nagad");
+ $("cfgRocket").checked=(s.gateways||[]).includes("Rocket");
+ $("cfgWeb").checked=!!s.showWeb;
+ $("cfgTasks").checked=!!s.showTasks;
+}
+
+async function saveSettings(){
+ const msg=$("settingsMessage");
+ if(!adminAuthenticated){msg.textContent="Admin login required.";return;}
+ const settings={
+  reward:Number($("cfgReward").value),
+  waitSeconds:Number($("cfgWait").value),
+  dailyLimit:Number($("cfgLimit").value),
+  bonusPercent:Number($("cfgBonus").value),
+  minimumWithdraw:Number($("cfgMinimum").value),
+  requiredReferrals:Number($("cfgRefs").value),
+  botUsername:$("cfgBot").value.trim().replace(/^@/,""),
+  gateways:[
+   ...($("cfgBkash").checked?["Bkash"]:[]),
+   ...($("cfgNagad").checked?["Nagad"]:[]),
+   ...($("cfgRocket").checked?["Rocket"]:[ ])
+  ],
+  showWeb:$("cfgWeb").checked,
+  showTasks:$("cfgTasks").checked
+ };
+ if(settings.waitSeconds<1||settings.dailyLimit<0||settings.reward<0||
+    settings.requiredReferrals<0||settings.minimumWithdraw<0||
+    settings.bonusPercent<0||settings.bonusPercent>100){
+  msg.textContent="সেটিংসের মানগুলো সঠিকভাবে দিন।";return;
+ }
+ try{
+  await api("admin_save_settings",settings);
+  await loadSettings();
+  msg.textContent="Settings saved successfully.";
+ }catch(err){msg.textContent=err.message;}
+}
+
+async function loadSettings(){
+ try{
+  const d=await api("settings");
+  const s=d.settings||d;
+  CONFIG.reward=Number(s.reward||0);
+  CONFIG.waitSeconds=Number(s.waitSeconds||0);
+  CONFIG.dailyLimit=Number(s.dailyLimit||0);
+  CONFIG.bonusPercent=Number(s.bonusPercent||0);
+  CONFIG.minimumWithdraw=Number(s.minimumWithdraw||0);
+  CONFIG.requiredReferrals=Number(s.requiredReferrals||0);
+  CONFIG.botUsername=s.botUsername||"";
+  CONFIG.gateways=Array.isArray(s.gateways)?s.gateways:[];
+  CONFIG.showWeb=!!s.showWeb;CONFIG.showTasks=!!s.showTasks;
+  renderSettings();
+ }catch(e){
+  // Fail closed: do not display payment methods if settings cannot load.
+  CONFIG.gateways=[];
+  renderSettings();
+  $("earnMessage").textContent="Settings load হয়নি। সার্ভার সংযোগ পরীক্ষা করুন।";
+ }
+}
+
+function renderSettings(){
+ $("waitTime").textContent=CONFIG.waitSeconds||"--";
+ $("dailyLimit").textContent=CONFIG.dailyLimit+" Ads";
+ $("reward").textContent=money(CONFIG.reward);
+ $("bonusRate").textContent=CONFIG.bonusPercent+"%";
+ $("withdrawNotice").textContent=
+  "Minimum withdrawal: TK "+money(CONFIG.minimumWithdraw)+
+  ". Required referrals: "+CONFIG.requiredReferrals+".";
+ $("gatewayWrap").classList.toggle("hidden",CONFIG.gateways.length===0);
+ $("gatewayMessage").classList.toggle("hidden",CONFIG.gateways.length>0);
+ const select=$("gateway");select.innerHTML="";
+ if(CONFIG.gateways.length){
+  select.required=true;
+  const first=document.createElement("option");first.value="";first.textContent="Select payment method";select.append(first);
+  CONFIG.gateways.forEach(name=>{const o=document.createElement("option");o.value=name;o.textContent=name;select.append(o);});
+ }else{select.required=false;}
+ $("web").classList.toggle("hidden",!CONFIG.showWeb);
+ $("tasks").classList.toggle("hidden",!CONFIG.showTasks);
+ $("navWeb").classList.toggle("hidden",!CONFIG.showWeb);
+ $("navTasks").classList.toggle("hidden",!CONFIG.showTasks);
+ updateProgress();
+}
+
+function applyProfile(u){
+ if(!u)return;
+ account={...account,...u};
+ $("topName").textContent=account.first_name||"Telegram User";
+ $("topUsername").textContent=account.username?"@"+account.username:"Telegram account";
+ $("profileName").textContent=account.first_name||"Telegram User";
+ $("profileUsername").textContent=account.username?"@"+account.username:"Username not set";
+ $("profileId").textContent="Telegram ID: "+(account.id||"--");
+ if(account.photo_url){$("avatar").src=account.photo_url;$("profileAvatar").src=account.photo_url;}
+}
+function renderAccount(){
+ const b=money(account.balance),e=money(account.total_earned),w=money(account.total_withdrawn);
+ ["balance","walletBalance","profileBalance"].forEach(id=>$(id).textContent=b);
+ ["earned","profileEarned"].forEach(id=>$(id).textContent=e);
+ ["homeWithdrawn","profileWithdrawn"].forEach(id=>$(id).textContent=w);
+ ["network","refCount","profileRefs"].forEach(id=>$(id).textContent=account.referrals||0);
+ ["homeTasks","profileTasks"].forEach(id=>$(id).textContent=account.tasks_completed||0);
+}
+function updateProgress(){
+ const limit=Number(CONFIG.dailyLimit)||0,done=Number(todayDone)||0;
+ $("todayDone").textContent=done;
+ $("progressText").textContent=done+" / "+limit;
+ $("progressBar").style.width=(limit?Math.min(100,done/limit*100):0)+"%";
+}
+async function loadAccount(){
+ try{
+  const d=await api("me");
+  if(d.user)applyProfile(d.user);
+  todayDone=Number(d.today_ads||0);
+  renderAccount();updateProgress();
+  $("refLink").value=d.referral_link||"";
+  $("withdrawHistory").innerHTML="";
+  (d.withdrawals||[]).forEach(w=>{
+   const row=document.createElement("div");row.className="detail";
+   const left=document.createElement("span");left.textContent="TK "+money(w.amount);
+   const right=document.createElement("strong");right.textContent=w.status||"Pending";
+   row.append(left,right);$("withdrawHistory").append(row);
+  });
+  if(!(d.withdrawals||[]).length)$("withdrawHistory").textContent="No withdrawal records.";
+ }catch(e){console.warn(e.message);}
+}
+function initTelegram(){
+ const u=tg?.initDataUnsafe?.user;
+ if(u)applyProfile({id:u.id,username:u.username||"",first_name:[u.first_name,u.last_name].filter(Boolean).join(" "),photo_url:u.photo_url||""});
+}
+async function startTask(){
+ if(timerBusy)return;
+ const btn=$("startBtn");
+ btn.disabled=true;timerBusy=true;
+ try{
+  const d=await api("start_ad",{});
+  let seconds=Number(d.waitSeconds??CONFIG.waitSeconds);
+  if(!Number.isFinite(seconds)||seconds<1)throw Error("Invalid wait time");
+  $("earnMessage").textContent="Please wait "+seconds+" seconds...";
+  timerInterval=setInterval(async()=>{
+   seconds--;
+   if(seconds>0){$("earnMessage").textContent="Please wait "+seconds+" seconds...";return;}
+   clearInterval(timerInterval);timerInterval=null;
+   try{
+    // Server independently validates task timing, daily limit and reward.
+    const done=await api("complete_ad",{taskId:d.taskId});
+    $("earnMessage").textContent=done.message||"Task completed.";
+    await loadAccount();
+   }catch(err){$("earnMessage").textContent=err.message;}
+   finally{timerBusy=false;btn.disabled=false;}
+  },1000);
+ }catch(err){
+  $("earnMessage").textContent=err.message;
+  timerBusy=false;btn.disabled=false;
+ }
+}
+async function requestWithdrawal(e){
+ e.preventDefault();
+ const msg=$("withdrawMessage");
+ const amount=Number($("withdrawAmount").value);
+ const method=$("gateway").value;
+ const wallet=$("walletAddress").value.trim();
+ if(!CONFIG.gateways.length){msg.textContent="Admin has not enabled any payment method.";return;}
+ if(!CONFIG.gateways.includes(method)){msg.textContent="Select an enabled payment method.";return;}
+ if(amount<CONFIG.minimumWithdraw){msg.textContent="Minimum withdrawal TK "+money(CONFIG.minimumWithdraw);return;}
+ try{
+  const d=await api("withdraw",{amount,method,wallet});
+  msg.textContent=d.message||"Withdrawal request submitted.";
+  await loadAccount();
+ }catch(err){msg.textContent=err.message;}
+}
+function copyLink(){
+ const input=$("refLink");
+ if(!input.value){alert("Referral link is not available yet.");return;}
+ input.select();
+ if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(input.value).then(()=>alert("Link copied!")).catch(()=>document.execCommand("copy"));
+ else document.execCommand("copy");
+}
+function shareLink(){
+ const link=$("refLink").value;
+ if(!link){alert("Referral link is not available yet.");return;}
+ const url="https://t.me/share/url?url="+encodeURIComponent(link)+"&text="+encodeURIComponent("Join SR Earn BD!");
+ if(tg?.openTelegramLink)tg.openTelegramLink(url);else window.open(url,"_blank");
+}
+
+initTelegram();
+renderAccount();
+loadSettings();
+loadAccount();
+</script>
+</body>
+</html><!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="theme-color" content="#080d19">
+<title>SR Earn BD</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<style>
+:root{--bg:#080d19;--card:#111b2e;--line:#263750;--blue:#1688ff;--cyan:#40c4ff;--green:#28dba0;--white:#f4f7ff;--muted:#91a0b8}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--white);font-family:Arial,sans-serif;padding-bottom:85px}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.topbar{height:62px;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:#0b1220;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:5}
+.brand{font-size:20px;font-weight:900}.brand span{color:var(--blue)}
+.btn-icon{width:40px;height:40px;border-radius:12px;background:#15233a;color:white;border:1px solid var(--line)}
+.container{max-width:600px;margin:auto;padding:14px}
+.userbar{display:flex;align-items:center;gap:11px;padding:12px;background:var(--card);border:1px solid var(--line);border-radius:22px;margin-bottom:15px}
+.avatar{width:49px;height:49px;border-radius:50%;object-fit:cover;background:#17243a;border:2px solid var(--blue)}
+.userinfo{flex:1;min-width:0}.username{font-size:15px;font-weight:bold;overflow-wrap:anywhere}
+.uid{font-size:12px;color:var(--cyan);margin-top:5px}
+.badge{font-size:10px;padding:8px;border-radius:20px;background:#10342f;color:var(--green)}
+.page{display:none}.page.active{display:block}
+.balance-card,.banner{background:linear-gradient(130deg,#101a2c,#064c98,#087de4);border:1px solid #2369ac;border-radius:25px;padding:23px 18px;margin-bottom:15px}
+.eyebrow{font-size:12px;letter-spacing:1.5px;color:#d0e5ff;font-weight:bold}
+.balance{font-size:38px;font-weight:900;margin:18px 0 23px;overflow-wrap:anywhere}
+.stats,.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat,.info{padding:15px 10px;background:#101b2e;border:1px solid var(--line);border-radius:17px;text-align:center}
+.stat span,.info span{display:block;color:var(--muted);font-size:11px;margin-bottom:10px}
+.stat strong,.info strong{font-size:18px}
+.section-title{font-weight:bold;margin:23px 0 12px}
+.menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.menu-card{min-height:112px;background:var(--card);color:white;border:1px solid var(--line);border-radius:19px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:12px}
+.menu-card i{font-size:24px;color:var(--cyan)}.menu-card b{font-size:11px}
+.banner{text-align:center;padding:25px 15px}.banner i{font-size:35px;color:var(--cyan)}
+.banner h2{font-size:22px;color:var(--green);margin:15px 0 8px}.banner p{font-size:13px;line-height:1.6}
+.panel{background:var(--card);border:1px solid var(--line);padding:18px;border-radius:22px;margin:14px 0}
+.panel h2{font-size:19px;margin-top:0}
+.panel p{color:var(--muted);font-size:13px;line-height:1.6}
+.info{padding:17px 8px}.info i{display:block;color:var(--cyan);font-size:22px;margin-bottom:12px}
+.progress-wrap{background:#0b1322;border:1px solid var(--line);border-radius:16px;padding:15px;margin:15px 0}
+.progress-head{display:flex;justify-content:space-between;font-size:12px;margin-bottom:12px}
+.progress{height:8px;background:#29374d;border-radius:10px;overflow:hidden}
+.progress div{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--cyan))}
+.primary{width:100%;padding:15px;border:0;border-radius:14px;background:linear-gradient(100deg,#0875ed,#169cff);color:white;font-weight:bold}
+.primary:disabled{opacity:.5}
+.secondary{background:#14253d;color:#8fcaff;border:1px solid #2b4d72;padding:12px;border-radius:12px}
+.field{margin:15px 0}.field label{display:block;color:#b9c8dd;font-size:12px;margin-bottom:8px}
+.field input,.field select{width:100%;padding:14px;background:#0a1322;border:1px solid #2b3d57;border-radius:12px;color:white;outline:none}
+.field select option{background:#111b2e}
+.rowlink{display:flex;gap:7px}.rowlink input{min-width:0;flex:1;font-size:12px}
+.copy{background:var(--blue);border:0;color:white;border-radius:10px;padding:0 12px}
+.detail{display:flex;justify-content:space-between;gap:12px;padding:13px 0;border-bottom:1px solid var(--line);font-size:13px}
+.detail span{color:var(--muted)}.detail strong{text-align:right;overflow-wrap:anywhere}
+.notice{background:#302817;border:1px solid #5b4927;color:#ffdc8b;padding:12px;border-radius:12px;font-size:12px;line-height:1.6;margin:13px 0}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;display:flex;justify-content:space-around;background:#0c1423;border-top:1px solid var(--line);padding:9px 2px calc(9px + env(safe-area-inset-bottom));z-index:8}
+.nav-btn{flex:1;min-width:0;border:0;background:none;color:#8494ad;font-size:9px;font-weight:bold;display:flex;align-items:center;flex-direction:column;gap:7px;padding:5px 0}
+.nav-btn i{font-size:20px}.nav-btn.active{color:#42aaff}
+.hidden{display:none!important}
+.profile-head{text-align:center;padding:12px}
+.profile-avatar{width:85px;height:85px;border-radius:50%;object-fit:cover;border:3px solid var(--blue)}
+#adminPage .field label{font-size:13px}
+.setting-title{color:var(--cyan);font-size:14px;margin-top:23px}
+.status{font-size:12px;line-height:1.6;overflow-wrap:anywhere}
+.checkrow{display:flex;align-items:center;gap:10px;padding:10px 0;font-size:13px}
+.checkrow input{width:18px;height:18px;accent-color:var(--blue)}
+@media(max-width:360px){.container{padding:10px}.balance{font-size:32px}.menu-grid{gap:6px}.menu-card{min-height:100px}.menu-card b{font-size:10px}.badge{font-size:9px;padding:6px}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+ <button class="btn-icon" onclick="showPage('home')" aria-label="Home"><i class="fa-solid fa-house"></i></button>
+ <div class="brand">SR <span>EARN BD</span></div>
+ <button class="btn-icon" onclick="openAdmin()" aria-label="Admin Login"><i class="fa-solid fa-user-shield"></i></button>
+</header>
+
+<div class="container">
+<div class="userbar">
+ <img id="avatar" class="avatar" src="https://placehold.co/100x100/15233a/40c4ff?text=SR" alt="Telegram profile">
+ <div class="userinfo">
+  <div class="username" id="topName">Telegram User</div>
+  <div class="uid" id="topUsername">Open inside Telegram</div>
+ </div>
+ <span class="badge">● ACTIVE</span>
+</div>
+
+<!-- HOME -->
+<section id="home" class="page active">
+ <div class="balance-card">
+  <div class="eyebrow">CURRENT PROFIT WALLET</div>
+  <div class="balance">TK <span id="balance">0.00</span></div>
+  <div class="stats">
+   <div class="stat"><span>TOTAL EARNED</span><strong>TK <span id="earned">0.00</span></strong></div>
+   <div class="stat"><span>MY NETWORK</span><strong id="network">0</strong></div>
+  </div>
+ </div>
+ <div class="section-title">Quick Menu</div>
+ <div class="menu-grid">
+  <button class="menu-card" onclick="showPage('earn')"><i class="fa-solid fa-circle-play"></i><b>EARN AD</b></button>
+  <button class="menu-card" onclick="showPage('web')"><i class="fa-solid fa-link"></i><b>WEB TASK</b></button>
+  <button class="menu-card" onclick="showPage('tasks')"><i class="fa-brands fa-telegram"></i><b>TASKS</b></button>
+  <button class="menu-card" onclick="showPage('wallet')"><i class="fa-solid fa-wallet"></i><b>WITHDRAW</b></button>
+  <button class="menu-card" onclick="showPage('refer')"><i class="fa-solid fa-gift"></i><b>REFERRAL</b></button>
+  <button class="menu-card" onclick="showPage('profile')"><i class="fa-solid fa-user"></i><b>PROFILE</b></button>
+ </div>
+ <div class="section-title">Account Overview</div>
+ <div class="grid2">
+  <div class="info"><i class="fa-solid fa-check-double"></i><span>COMPLETED TASKS</span><strong id="homeTasks">0</strong></div>
+  <div class="info"><i class="fa-solid fa-wallet"></i><span>TOTAL WITHDRAWN</span><strong>TK <span id="homeWithdrawn">0.00</span></strong></div>
+ </div>
+</section>
+
+<!-- EARN -->
+<section id="earn" class="page">
+ <div class="banner"><i class="fa-solid fa-circle-play"></i><h2>ADS REWARD CENTER</h2><p>Complete daily missions to earn rewards</p></div>
+ <div class="grid2">
+  <div class="info"><i class="fa-solid fa-stopwatch"></i><span>WAIT TIME</span><strong><span id="waitTime">--</span> Sec</strong></div>
+  <div class="info"><i class="fa-solid fa-bolt"></i><span>DAILY LIMIT</span><strong id="dailyLimit">--</strong></div>
+  <div class="info"><i class="fa-solid fa-bullseye"></i><span>REWARD PER AD</span><strong>TK <span id="reward">--</span></strong></div>
+  <div class="info"><i class="fa-solid fa-circle-check"></i><span>COMPLETED</span><strong id="todayDone">0</strong></div>
+ </div>
+ <div class="progress-wrap"><div class="progress-head"><b>Mission Progress</b><b id="progressText">0 / 0</b></div><div class="progress"><div id="progressBar"></div></div></div>
+ <div class="panel"><h2>Watch Ad & Earn</h2><p id="earnMessage">Task settings will appear after loading.</p><button class="primary" id="startBtn" onclick="startTask()"><i class="fa-solid fa-play"></i> START TASK</button></div>
+</section>
+
+<section id="web" class="page">
+ <div class="banner"><i class="fa-solid fa-link"></i><h2>WEB TASKS</h2><p>Available website tasks</p></div>
+ <div class="panel" id="webTasks"><p>No web tasks configured.</p></div>
+</section>
+
+<section id="tasks" class="page">
+ <div class="banner"><i class="fa-brands fa-telegram"></i><h2>DAILY TASKS</h2><p>Complete available tasks</p></div>
+ <div class="panel" id="taskList"><p>No tasks configured.</p></div>
+</section>
+
+<section id="refer" class="page">
+ <div class="banner"><i class="fa-solid fa-gift"></i><h2>INVITE & EARN</h2><p>Invite friends using your personal link</p></div>
+ <div class="grid2">
+  <div class="info"><i class="fa-solid fa-users"></i><span>TOTAL NETWORK</span><strong id="refCount">0</strong></div>
+  <div class="info"><i class="fa-solid fa-percent"></i><span>BONUS RATE</span><strong id="bonusRate">--</strong></div>
+ </div>
+ <div class="panel"><h2>YOUR NETWORK LINK</h2>
+  <div class="field"><label>Personal referral link</label><div class="rowlink"><input id="refLink" readonly placeholder="Loading referral link"><button class="copy" onclick="copyLink()">COPY</button></div></div>
+  <button class="primary" onclick="shareLink()"><i class="fa-brands fa-telegram"></i> SHARE ON TELEGRAM</button>
+ </div>
+</section>
+
+<section id="wallet" class="page">
+ <div class="banner"><i class="fa-solid fa-wallet"></i><h2>MY WALLET</h2><p>Withdrawal requests</p></div>
+ <div class="panel"><div class="eyebrow">AVAILABLE BALANCE</div><div class="balance" style="font-size:32px">TK <span id="walletBalance">0.00</span></div>
+  <div class="notice" id="withdrawNotice">Withdrawal settings are not configured yet.</div>
+  <form onsubmit="requestWithdrawal(event)">
+   <div class="field"><label>WITHDRAWAL AMOUNT</label><input id="withdrawAmount" type="number" min="1" step="0.01" required placeholder="Enter amount"></div>
+   <div class="field"><label>ACCOUNT / WALLET ADDRESS</label><input id="walletAddress" required placeholder="Enter wallet number"></div>
+   <div id="gatewayWrap" class="field hidden"><label>SELECT PAYMENT GATEWAY</label><select id="gateway" required></select></div>
+   <p id="gatewayMessage" class="status">Payment methods are currently unavailable.</p>
+   <button class="primary" type="submit">SUBMIT WITHDRAWAL</button>
+   <p id="withdrawMessage" class="status"></p>
+  </form>
+ </div>
+ <div class="panel"><h2>Withdrawal History</h2><div id="withdrawHistory"><p>No withdrawal records.</p></div></div>
+</section>
+
+<section id="profile" class="page">
+ <div class="panel">
+  <div class="profile-head"><img id="profileAvatar" class="profile-avatar" src="https://placehold.co/100x100/15233a/40c4ff?text=SR" alt="Profile"><h2 id="profileName">Telegram User</h2><p id="profileUsername">@username</p><p class="uid" id="profileId">Telegram ID: --</p></div>
+  <div class="detail"><span>Total earned</span><strong>TK <span id="profileEarned">0.00</span></strong></div>
+  <div class="detail"><span>Current balance</span><strong>TK <span id="profileBalance">0.00</span></strong></div>
+  <div class="detail"><span>Total withdrawn</span><strong>TK <span id="profileWithdrawn">0.00</span></strong></div>
+  <div class="detail"><span>Tasks completed</span><strong id="profileTasks">0</strong></div>
+  <div class="detail"><span>Total referrals</span><strong id="profileRefs">0</strong></div>
+ </div>
+ <div class="panel"><button class="secondary" onclick="loadAccount()">REFRESH PROFILE</button></div>
+</section>
+
+<!-- ADMIN LOGIN -->
+<section id="adminLogin" class="page">
+ <div class="banner"><i class="fa-solid fa-user-shield"></i><h2>ADMIN LOGIN</h2><p>Administrator access only</p></div>
+ <div class="panel">
+  <form onsubmit="adminLogin(event)">
+   <div class="field"><label>ADMIN EMAIL</label><input id="adminEmail" type="email" autocomplete="username" required placeholder="Admin email"></div>
+   <div class="field"><label>ADMIN PASSWORD</label><input id="adminPassword" type="password" autocomplete="current-password" required placeholder="Admin password"></div>
+   <button class="primary" id="adminLoginBtn" type="submit">SECURE LOGIN</button>
+   <p id="adminLoginMessage" class="status"></p>
+  </form>
+  <button class="secondary" onclick="showPage('home')">BACK TO HOME</button>
+ </div>
+</section>
+
+<!-- ADMIN PANEL -->
+<section id="adminPage" class="page">
+ <div class="banner"><i class="fa-solid fa-sliders"></i><h2>ADMIN CONTROL PANEL</h2><p>Manage rewards and user options</p></div>
+ <div class="panel">
+  <h2>Reward Settings</h2>
+  <div class="field"><label>Reward per completed ad (TK)</label><input id="cfgReward" type="number" min="0" step="0.01"></div>
+  <div class="field"><label>Ad wait time (seconds)</label><input id="cfgWait" type="number" min="1" step="1"></div>
+  <div class="field"><label>Daily ad limit</label><input id="cfgLimit" type="number" min="0" step="1"></div>
+  <div class="field"><label>Referral bonus (%)</label><input id="cfgBonus" type="number" min="0" max="100" step="0.1"></div>
+  <div class="field"><label>Minimum withdrawal (TK)</label><input id="cfgMinimum" type="number" min="0" step="0.01"></div>
+  <div class="field"><label>Required referrals for withdrawal</label><input id="cfgRefs" type="number" min="0" step="1"></div>
+  <div class="field"><label>Telegram bot username (without @)</label><input id="cfgBot" placeholder="YourBotUsername"></div>
+  <div class="setting-title">Payment Gateway Visibility</div>
+  <p>শুধু টিক দেওয়া পেমেন্ট অপশন ইউজারের Wallet-এ দেখানোর জন্য সার্ভারে সংরক্ষণ করুন।</p>
+  <label class="checkrow"><input type="checkbox" id="cfgBkash"> bKash চালু রাখুন</label>
+  <label class="checkrow"><input type="checkbox" id="cfgNagad"> Nagad চালু রাখুন</label>
+  <label class="checkrow"><input type="checkbox" id="cfgRocket"> Rocket চালু রাখুন</label>
+  <div class="setting-title">Feature Visibility</div>
+  <label class="checkrow"><input type="checkbox" id="cfgWeb"> Web Task অপশন দেখান</label>
+  <label class="checkrow"><input type="checkbox" id="cfgTasks"> Telegram Tasks অপশন দেখান</label>
+  <button class="primary" onclick="saveSettings()">SAVE SETTINGS</button>
+  <p id="settingsMessage" class="status"></p>
+ </div>
+ <div class="panel">
+  <h2>Admin Session</h2>
+  <p>অ্যাডমিন কাজ শেষ হলে লগআউট করুন।</p>
+  <button class="secondary" onclick="adminLogout()">ADMIN LOGOUT</button>
+ </div>
+</section>
+</div>
+
+<nav class="bottom-nav" id="bottomNav">
+ <button class="nav-btn active" data-page="home" onclick="showPage('home')"><i class="fa-solid fa-house"></i>HOME</button>
+ <button class="nav-btn" data-page="web" id="navWeb" onclick="showPage('web')"><i class="fa-solid fa-link"></i>WEB</button>
+ <button class="nav-btn" data-page="earn" onclick="showPage('earn')"><i class="fa-solid fa-play"></i>EARN</button>
+ <button class="nav-btn" data-page="tasks" id="navTasks" onclick="showPage('tasks')"><i class="fa-brands fa-telegram"></i>TASKS</button>
+ <button class="nav-btn" data-page="refer" onclick="showPage('refer')"><i class="fa-solid fa-gift"></i>REFER</button>
+ <button class="nav-btn" data-page="wallet" onclick="showPage('wallet')"><i class="fa-solid fa-wallet"></i>WALLET</button>
+ <button class="nav-btn" data-page="profile" onclick="showPage('profile')"><i class="fa-solid fa-user"></i>PROFILE</button>
+</nav>
+
+<script>
+/*
+  SR EARN BD FRONTEND
+  PHP/MySQL backend API প্রয়োজন।
+
+  apiUrl: তোমার সার্ভারের API endpoint বসাও।
+  নিচের API action-গুলো সার্ভারে তৈরি করতে হবে:
+  me, settings, admin_login, admin_settings,
+  admin_save_settings, start_ad, complete_ad, withdraw
+
+  Admin email/password কখনো এই ফাইলে সংরক্ষণ করবে না।
+*/
+const CONFIG = {
+ apiUrl: "", // উদাহরণ: https://yourdomain.com/api.php
+ botUsername: "",
+ reward: 0,
+ waitSeconds: 0,
+ dailyLimit: 0,
+ bonusPercent: 0,
+ minimumWithdraw: 0,
+ requiredReferrals: 0,
+ gateways: [],
+ showWeb: false,
+ showTasks: false
+};
+
+const tg = window.Telegram?.WebApp;
+if(tg){tg.ready();tg.expand();}
+
+const $=id=>document.getElementById(id);
+const money=n=>Number(n||0).toFixed(2);
+let account={id:null,username:"",first_name:"Telegram User",photo_url:"",balance:0,total_earned:0,total_withdrawn:0,tasks_completed:0,referrals:0};
+let todayDone=0,timerBusy=false,timerInterval=null,adminAuthenticated=false;
+
+function showPage(id){
+ if(id==="adminPage"&&!adminAuthenticated){openAdmin();return;}
+ document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
+ $(id).classList.add("active");
+ document.querySelectorAll(".nav-btn").forEach(b=>b.classList.toggle("active",b.dataset.page===id));
+ $("bottomNav").classList.toggle("hidden",id==="adminLogin"||id==="adminPage");
+ if(tg?.BackButton){if(["home","adminLogin","adminPage"].includes(id))tg.BackButton.hide();else tg.BackButton.show();}
+ window.scrollTo({top:0,behavior:"smooth"});
+}
+if(tg?.BackButton)tg.BackButton.onClick(()=>showPage("home"));
+
+async function api(action,payload){
+ if(!CONFIG.apiUrl)throw Error("API URL সেট করা হয়নি। আগে PHP backend সংযুক্ত করুন।");
+ const headers={"Content-Type":"application/json"};
+ if(tg?.initData)headers["X-Telegram-Init-Data"]=tg.initData;
+ const res=await fetch(CONFIG.apiUrl+"?api="+encodeURIComponent(action),{
+  method:payload?"POST":"GET",headers,
+  credentials:"include",
+  body:payload?JSON.stringify(payload):undefined
+ });
+ const data=await res.json();
+ if(!res.ok||data.error)throw Error(data.error||"Request failed");
+ return data;
+}
+
+function openAdmin(){
+ $("adminEmail").value="";
+ $("adminPassword").value="";
+ $("adminLoginMessage").textContent="";
+ showPage("adminLogin");
+}
+
+async function adminLogin(e){
+ e.preventDefault();
+ const btn=$("adminLoginBtn"),msg=$("adminLoginMessage");
+ btn.disabled=true;msg.textContent="Verifying administrator...";
+ try{
+  // Server verifies the email and password and creates a secure session.
+  const result=await api("admin_login",{
+   email:$("adminEmail").value.trim(),
+   password:$("adminPassword").value
+  });
+  if(!result.success)throw Error(result.message||"Login failed");
+  adminAuthenticated=true;
+  $("adminPassword").value="";
+  await loadAdminSettings();
+  showPage("adminPage");
+ }catch(err){msg.textContent=err.message;}
+ finally{btn.disabled=false;}
+}
+
+async function adminLogout(){
+ try{await api("admin_logout",{});}catch(e){}
+ adminAuthenticated=false;
+ showPage("home");
+}
+
+async function loadAdminSettings(){
+ if(!adminAuthenticated)throw Error("Admin login required");
+ const d=await api("admin_settings");
+ const s=d.settings||d;
+ $("cfgReward").value=s.reward??0;
+ $("cfgWait").value=s.waitSeconds??15;
+ $("cfgLimit").value=s.dailyLimit??0;
+ $("cfgBonus").value=s.bonusPercent??0;
+ $("cfgMinimum").value=s.minimumWithdraw??0;
+ $("cfgRefs").value=s.requiredReferrals??0;
+ $("cfgBot").value=s.botUsername??"";
+ $("cfgBkash").checked=(s.gateways||[]).includes("Bkash");
+ $("cfgNagad").checked=(s.gateways||[]).includes("Nagad");
+ $("cfgRocket").checked=(s.gateways||[]).includes("Rocket");
+ $("cfgWeb").checked=!!s.showWeb;
+ $("cfgTasks").checked=!!s.showTasks;
+}
+
+async function saveSettings(){
+ const msg=$("settingsMessage");
+ if(!adminAuthenticated){msg.textContent="Admin login required.";return;}
+ const settings={
+  reward:Number($("cfgReward").value),
+  waitSeconds:Number($("cfgWait").value),
+  dailyLimit:Number($("cfgLimit").value),
+  bonusPercent:Number($("cfgBonus").value),
+  minimumWithdraw:Number($("cfgMinimum").value),
+  requiredReferrals:Number($("cfgRefs").value),
+  botUsername:$("cfgBot").value.trim().replace(/^@/,""),
+  gateways:[
+   ...($("cfgBkash").checked?["Bkash"]:[]),
+   ...($("cfgNagad").checked?["Nagad"]:[]),
+   ...($("cfgRocket").checked?["Rocket"]:[ ])
+  ],
+  showWeb:$("cfgWeb").checked,
+  showTasks:$("cfgTasks").checked
+ };
+ if(settings.waitSeconds<1||settings.dailyLimit<0||settings.reward<0||
+    settings.requiredReferrals<0||settings.minimumWithdraw<0||
+    settings.bonusPercent<0||settings.bonusPercent>100){
+  msg.textContent="সেটিংসের মানগুলো সঠিকভাবে দিন।";return;
+ }
+ try{
+  await api("admin_save_settings",settings);
+  await loadSettings();
+  msg.textContent="Settings saved successfully.";
+ }catch(err){msg.textContent=err.message;}
+}
+
+async function loadSettings(){
+ try{
+  const d=await api("settings");
+  const s=d.settings||d;
+  CONFIG.reward=Number(s.reward||0);
+  CONFIG.waitSeconds=Number(s.waitSeconds||0);
+  CONFIG.dailyLimit=Number(s.dailyLimit||0);
+  CONFIG.bonusPercent=Number(s.bonusPercent||0);
+  CONFIG.minimumWithdraw=Number(s.minimumWithdraw||0);
+  CONFIG.requiredReferrals=Number(s.requiredReferrals||0);
+  CONFIG.botUsername=s.botUsername||"";
+  CONFIG.gateways=Array.isArray(s.gateways)?s.gateways:[];
+  CONFIG.showWeb=!!s.showWeb;CONFIG.showTasks=!!s.showTasks;
+  renderSettings();
+ }catch(e){
+  // Fail closed: do not display payment methods if settings cannot load.
+  CONFIG.gateways=[];
+  renderSettings();
+  $("earnMessage").textContent="Settings load হয়নি। সার্ভার সংযোগ পরীক্ষা করুন।";
+ }
+}
+
+function renderSettings(){
+ $("waitTime").textContent=CONFIG.waitSeconds||"--";
+ $("dailyLimit").textContent=CONFIG.dailyLimit+" Ads";
+ $("reward").textContent=money(CONFIG.reward);
+ $("bonusRate").textContent=CONFIG.bonusPercent+"%";
+ $("withdrawNotice").textContent=
+  "Minimum withdrawal: TK "+money(CONFIG.minimumWithdraw)+
+  ". Required referrals: "+CONFIG.requiredReferrals+".";
+ $("gatewayWrap").classList.toggle("hidden",CONFIG.gateways.length===0);
+ $("gatewayMessage").classList.toggle("hidden",CONFIG.gateways.length>0);
+ const select=$("gateway");select.innerHTML="";
+ if(CONFIG.gateways.length){
+  select.required=true;
+  const first=document.createElement("option");first.value="";first.textContent="Select payment method";select.append(first);
+  CONFIG.gateways.forEach(name=>{const o=document.createElement("option");o.value=name;o.textContent=name;select.append(o);});
+ }else{select.required=false;}
+ $("web").classList.toggle("hidden",!CONFIG.showWeb);
+ $("tasks").classList.toggle("hidden",!CONFIG.showTasks);
+ $("navWeb").classList.toggle("hidden",!CONFIG.showWeb);
+ $("navTasks").classList.toggle("hidden",!CONFIG.showTasks);
+ updateProgress();
+}
+
+function applyProfile(u){
+ if(!u)return;
+ account={...account,...u};
+ $("topName").textContent=account.first_name||"Telegram User";
+ $("topUsername").textContent=account.username?"@"+account.username:"Telegram account";
+ $("profileName").textContent=account.first_name||"Telegram User";
+ $("profileUsername").textContent=account.username?"@"+account.username:"Username not set";
+ $("profileId").textContent="Telegram ID: "+(account.id||"--");
+ if(account.photo_url){$("avatar").src=account.photo_url;$("profileAvatar").src=account.photo_url;}
+}
+function renderAccount(){
+ const b=money(account.balance),e=money(account.total_earned),w=money(account.total_withdrawn);
+ ["balance","walletBalance","profileBalance"].forEach(id=>$(id).textContent=b);
+ ["earned","profileEarned"].forEach(id=>$(id).textContent=e);
+ ["homeWithdrawn","profileWithdrawn"].forEach(id=>$(id).textContent=w);
+ ["network","refCount","profileRefs"].forEach(id=>$(id).textContent=account.referrals||0);
+ ["homeTasks","profileTasks"].forEach(id=>$(id).textContent=account.tasks_completed||0);
+}
+function updateProgress(){
+ const limit=Number(CONFIG.dailyLimit)||0,done=Number(todayDone)||0;
+ $("todayDone").textContent=done;
+ $("progressText").textContent=done+" / "+limit;
+ $("progressBar").style.width=(limit?Math.min(100,done/limit*100):0)+"%";
+}
+async function loadAccount(){
+ try{
+  const d=await api("me");
+  if(d.user)applyProfile(d.user);
+  todayDone=Number(d.today_ads||0);
+  renderAccount();updateProgress();
+  $("refLink").value=d.referral_link||"";
+  $("withdrawHistory").innerHTML="";
+  (d.withdrawals||[]).forEach(w=>{
+   const row=document.createElement("div");row.className="detail";
+   const left=document.createElement("span");left.textContent="TK "+money(w.amount);
+   const right=document.createElement("strong");right.textContent=w.status||"Pending";
+   row.append(left,right);$("withdrawHistory").append(row);
+  });
+  if(!(d.withdrawals||[]).length)$("withdrawHistory").textContent="No withdrawal records.";
+ }catch(e){console.warn(e.message);}
+}
+function initTelegram(){
+ const u=tg?.initDataUnsafe?.user;
+ if(u)applyProfile({id:u.id,username:u.username||"",first_name:[u.first_name,u.last_name].filter(Boolean).join(" "),photo_url:u.photo_url||""});
+}
+async function startTask(){
+ if(timerBusy)return;
+ const btn=$("startBtn");
+ btn.disabled=true;timerBusy=true;
+ try{
+  const d=await api("start_ad",{});
+  let seconds=Number(d.waitSeconds??CONFIG.waitSeconds);
+  if(!Number.isFinite(seconds)||seconds<1)throw Error("Invalid wait time");
+  $("earnMessage").textContent="Please wait "+seconds+" seconds...";
+  timerInterval=setInterval(async()=>{
+   seconds--;
+   if(seconds>0){$("earnMessage").textContent="Please wait "+seconds+" seconds...";return;}
+   clearInterval(timerInterval);timerInterval=null;
+   try{
+    // Server independently validates task timing, daily limit and reward.
+    const done=await api("complete_ad",{taskId:d.taskId});
+    $("earnMessage").textContent=done.message||"Task completed.";
+    await loadAccount();
+   }catch(err){$("earnMessage").textContent=err.message;}
+   finally{timerBusy=false;btn.disabled=false;}
+  },1000);
+ }catch(err){
+  $("earnMessage").textContent=err.message;
+  timerBusy=false;btn.disabled=false;
+ }
+}
+async function requestWithdrawal(e){
+ e.preventDefault();
+ const msg=$("withdrawMessage");
+ const amount=Number($("withdrawAmount").value);
+ const method=$("gateway").value;
+ const wallet=$("walletAddress").value.trim();
+ if(!CONFIG.gateways.length){msg.textContent="Admin has not enabled any payment method.";return;}
+ if(!CONFIG.gateways.includes(method)){msg.textContent="Select an enabled payment method.";return;}
+ if(amount<CONFIG.minimumWithdraw){msg.textContent="Minimum withdrawal TK "+money(CONFIG.minimumWithdraw);return;}
+ try{
+  const d=await api("withdraw",{amount,method,wallet});
+  msg.textContent=d.message||"Withdrawal request submitted.";
+  await loadAccount();
+ }catch(err){msg.textContent=err.message;}
+}
+function copyLink(){
+ const input=$("refLink");
+ if(!input.value){alert("Referral link is not available yet.");return;}
+ input.select();
+ if(navigator.clipboard&&window.isSecureContext)navigator.clipboard.writeText(input.value).then(()=>alert("Link copied!")).catch(()=>document.execCommand("copy"));
+ else document.execCommand("copy");
+}
+function shareLink(){
+ const link=$("refLink").value;
+ if(!link){alert("Referral link is not available yet.");return;}
+ const url="https://t.me/share/url?url="+encodeURIComponent(link)+"&text="+encodeURIComponent("Join SR Earn BD!");
+ if(tg?.openTelegramLink)tg.openTelegramLink(url);else window.open(url,"_blank");
+}
+
+initTelegram();
+renderAccount();
+loadSettings();
+loadAccount();
+</script>
+</body>
+</html>
